@@ -19,11 +19,12 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
   const resourceData = req.body;
 
-  project.addResource(resourceData)
+  resource.addResource(resourceData)
     .then(newResource => {
       res.status(201).json(newResource);
     })
     .catch(err => {
+      console.log(err.message);
       res.status(500).json({ message: "Failed to create new resource" });
     });
 });
