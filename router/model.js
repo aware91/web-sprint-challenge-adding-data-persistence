@@ -51,8 +51,11 @@ function addResource(resources) {
 }
 
 // Task
-function findTask(id) {
+function findTask() {
   return db('task')
+    .join('project as p', 'project_task as pt')
+    .where('p.id', '=', 'pt.project_id')
+    .andWhere('t.id', '=', 'pt.task_id')
 }
 
 function findByIdT(id) {
