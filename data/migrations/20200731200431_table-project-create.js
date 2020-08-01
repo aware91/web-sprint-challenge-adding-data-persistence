@@ -29,6 +29,8 @@ exports.up = function(knex) {
       tbl.string('name', 128)
         .notNullable()
         .unique();
+      tbl.string('description', 256)
+        .notNullable();
     })
     .createTable('project_resource', tbl => {
       tbl.integer('project_id')
