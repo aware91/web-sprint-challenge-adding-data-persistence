@@ -51,3 +51,20 @@ function addResource(resources) {
 }
 
 // Task
+function findTask(id) {
+  return db('task')
+}
+
+function findByIdT(id) {
+  return db('task')
+    .where({id})
+    .first();
+}
+
+function addTask(tasks) {
+  return db("task")
+  .insert(tasks)
+  .then(ids => {
+    return findByIdT(ids[0]);
+  });
+}
