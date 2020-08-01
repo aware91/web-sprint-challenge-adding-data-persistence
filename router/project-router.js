@@ -2,90 +2,32 @@ const express = require("express");
 
 const db = require("../data/db-config.js");
 
-const users = require('../users/project-model.js');
+const project = require('./model.js');
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  users.find()
-    .then(users => {
-      res.json(users);
+  project.findProject()
+    .then(project => {
+      res.json(project);
     })
     .catch(err => {
-      res.status(500).json({ message: "Failed to get users" });
+      res.status(500).json({ message: "Failed to get project" });
     });
 });
-
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-
-  users.findById(id)
-    .then(user => {
-      if (user) {
-        res.json(user);
-      } else {
-        res.status(404).json({ message: "Could not find user with given id." });
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ message: "Failed to get user" });
-    });
-});
-
-router.get('/:id/post', (req, res) => {
-  const {id} = req.params;
-    users.findPost(id)
-    .then(posts => {
-      res.json(posts)
-    })
-    .catch(err => {
-      res.status(500).json({message:'failed to get posts'})
-    })
-})
 
 router.post("/", (req, res) => {
-  const userData = req.body;
+  const projectData = req.body;
 
-  users.add(userData)
-    .then(newUser => {
-      res.status(201).json(newUser);
+  project.addProject(projectData)
+    .then(newProject => {
+      res.status(201).json(newProject);
     })
     .catch(err => {
-      res.status(500).json({ message: "Failed to create new user" });
+      console.log(err.message);
+      res.status(500).json({ message: "Failed to create new project." });
     });
 });
 
-router.put("/:id", (req, res) => {
-  const { id } = req.params;
-  const changes = req.body;
-
-  users.update(changes, id)
-    .then(user => {
-      if (user) {
-        res.json(user);
-      } else {
-        res.status(404).json({ message: "Could not find user with given id" });
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ message: "Failed to update user" });
-    });
-});
-
-router.delete("/:id", (req, res) => {
-  const { id } = req.params;
-
-  users.remove(id)
-    .then(count => {
-      if (count) {
-        res.json({ removed: count });
-      } else {
-        res.status(404).json({ message: "Could not find user with given id" });
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ message: "Failed to delete user" });
-    });
-});
 
 module.exports = router;
