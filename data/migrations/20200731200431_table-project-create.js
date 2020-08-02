@@ -2,29 +2,35 @@ const { table } = require("../db-config");
 
 exports.up = function(knex) {
   return knex.schema
-  .createTable('task', tbl => {
-    tbl.increments();
-    tbl.string('description', 256)
-      .notNullable();
-    tbl.string('notes', 256)
-      .notNullable();
-  })
     .createTable('project', tbl => {
       tbl.increments();
       tbl.string('name', 128)
         .notNullable()
         .unique();
+      tbl.string('description', 256);
+      tbl.boolean('completed')
+        .notNullable();
+    })
+    .createTable('task', tbl => {
+      tbl.increments();
       tbl.string('description', 256)
         .notNullable();
-      tbl.boolean('completed');
+      tbl.string('notes', 256);
+      tbl.boolean('completed')
+        .notNullable();
+      tbl.integer('project_id')
+        .unsigned()
+        .notNullable()
+        .references('project.id')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE');
     })
     .createTable('resource', tbl => {
       tbl.increments();
       tbl.string('name', 128)
         .notNullable()
         .unique();
-      tbl.string('description', 256)
-        .notNullable();
+      tbl.string('description', 256);
     })
     .createTable('project_resource', tbl => {
       tbl.integer('project_id')
@@ -33,7 +39,7 @@ exports.up = function(knex) {
         .references('project.id')
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
-        tbl.integer('resource_id')
+      tbl.integer('resource_id')
         .unsigned()
         .notNullable()
         .references('resource.id')
@@ -48,6 +54,7 @@ exports.up = function(knex) {
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
         tbl.integer('task_id')
+        .unique()
         .unsigned()
         .notNullable()
         .references('task.id')
@@ -61,6 +68,6 @@ exports.down = function(knex) {
     .dropTableIfExists('project_task')
     .dropTableIfExists('project_resource')
     .dropTableIfExists('resource')
-    .dropTableIfExists('project')
     .dropTableIfExists('task')
+    .dropTableIfExists('project')
 };

@@ -53,16 +53,7 @@ function addResource(resources) {
 // Task
 function findTask() {
   return db('task as t')
-    // .join(/*'project as p',*/ 'project_task as pt', 't.id', 'pt.task_id')
-    // .join('project as p', 'p.id', 'pt.project_id')
-    // .where('p.id', '=', 'pt.project_id')
-    // .andWhere('t.id', '=', 'pt.task_id')
-    // .where('t.id', '=', 'pt.task_id')
-    // .join('projects as p', 'project_task as pt', function () {
-    //   this 
-    //     .on('p.id', '=', 'pt.project_id')
-    //     .on('t.id', '=', 'pt.task_id')
-    //})
+    .join('project as p', 'p.id', '=', 'pt.project_id')
     .join('project_task as pt', 't.id', '=', 'pt.task_id')
 }
 
