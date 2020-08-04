@@ -53,8 +53,8 @@ function addResource(resources) {
 // Task
 function findTask() {
   return db('task as t')
-    .join('project as p', 'p.id', '=', 'pt.project_id')
     .join('project_task as pt', 't.id', '=', 'pt.task_id')
+    .join('project as p', 'p.id', '=', 'pt.project_id')
 }
 
 function findByIdT(id) {
